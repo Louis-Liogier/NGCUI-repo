@@ -1,0 +1,24 @@
+transport . train:
+  titre: Train
+  icônes: 🚋
+  description: |
+    ![](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/TER_Vesoul.jpg/640px-TER_Vesoul.jpg)
+  formule: km * impact par passager km
+
+transport . train . impact par passager km:
+  formule: 1.37
+  unité: kgMatiere/km
+
+
+transport . train . km:
+  question: Combien de kilomètres parcourez-vous en train par an ?
+  description: Les suggestions sont basées sur la distance à vol d'oiseau doublée pour considérer un aller-retour.
+  suggestions:
+    traversée d'une région: 300
+    Paris ⇄ Lyon: 800
+    Brest ⇄ Nice: 2400
+    💳 grand voyageur: 10000
+    💳 grand voyageur plus ultra: 25000
+  unité: km
+  plancher: 0
+  par défaut: 1000

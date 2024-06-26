@@ -1,0 +1,601 @@
+alimentation . repas:
+  icônes: 🍽️
+  formule:
+    somme:
+      - petit déjeuner annuel
+      - déjeuner et dîner
+      - bonus
+
+alimentation . bonus:
+  formule:
+    somme:
+      - de saison . empreinte
+      - local . empreinte
+
+alimentation . déjeuner et dîner:
+  icônes: 🍽️
+  titre: Déjeuners et dîners
+  formule: par semaine * commun . semaines par an
+  unité: kgMatiere
+
+alimentation . déjeuner et dîner . par semaine:
+  titre: Déjeuners et dîners par semaine
+  formule: plats
+  unité: kgMatiere/semaine
+
+alimentation . plats:
+  icônes: 🍽️
+  mosaique:
+    type: nombre
+    options:
+      - végétalien . nombre
+      - végétarien . nombre
+      - viande blanche . nombre
+      - viande rouge . nombre
+      - poisson gras . nombre
+      - poisson blanc . nombre
+    suggestions:
+      je suis végétalien:
+        végétalien . nombre: 14
+        végétarien . nombre: 0
+        viande blanche . nombre: 0
+        viande rouge . nombre: 0
+        poisson gras . nombre: 0
+        poisson blanc . nombre: 0
+      je suis végétarien:
+        végétalien . nombre: 3
+        végétarien . nombre: 11
+        viande blanche . nombre: 0
+        viande rouge . nombre: 0
+        poisson gras . nombre: 0
+        poisson blanc . nombre: 0
+      je mange peu de viande:
+        végétalien . nombre: 1
+        végétarien . nombre: 7
+        viande blanche . nombre: 4
+        viande rouge . nombre: 0
+        poisson gras . nombre: 1
+        poisson blanc . nombre: 1
+      je mange de la viande régulièrement:
+        végétarien . nombre: 4
+        végétalien . nombre: 0
+        viande blanche . nombre: 6
+        viande rouge . nombre: 2
+        poisson gras . nombre: 1
+        poisson blanc . nombre: 1
+      je mange beaucoup de viande:
+        végétalien . nombre: 0
+        végétarien . nombre: 0
+        viande blanche . nombre: 6
+        viande rouge . nombre: 6
+        poisson gras . nombre: 1
+        poisson blanc . nombre: 1
+  question: Choisissez les plats de vos déjeuners et dîners pour une semaine type
+  titre: Empreinte de 14 repas
+  description: |
+    Choisissez les plats qui représentent votre semaine type. 
+
+    A priori, vous en aurez 14 : 7 déjeuners et 7 dîners. Mais vous pouvez aussi manger moins, ou plus, c'est tout à fait possible !
+
+    > Aujourd'hui nous travaillons pour que les menus associés à vos repas soient les plus représentatifs de vos habitudes, n'hésitez pas à aller plus loin en parcourant la documentation.
+  formule:
+    somme:
+      - végétalien
+      - végétarien
+      - viande blanche
+      - viande rouge
+      - poisson gras
+      - poisson blanc
+  unité: kgMatiere/semaine
+  note: |
+    Pour le moment, nous proposons 6 repas types pour 6 régimes différents. Il a été choisi de limiter la granularité du modèle via 6 menus représentatifs 
+    des régimes associés pour simplifier l'estimation de l'empreinte du poste alimentation pour l'utilisateur 
+    (les spécificités de l'alimentation de chacun pourraient donner lieu à un simulateur complet dédié à l'alimentation).
+
+    Ils ne sont pas directement basés sur les régimes de la Base Empreinte, [documentés par l'ADEME](https://www.bilans-ges.ademe.fr/documentation/UPLOAD_DOC_FR/index.htm?repas.htm), jugés obsolètes (peu exhaustifs, FE non issus d'Agribalyse).
+
+    En revanche, nous avons travaillé sur des repas types basés sur une consolidation multi-facteurs (quantité totale d'aliments consommés, quantité de viande et poisson consommés, apports énergétiques, empreinte carbone moyenne d'un repas)
+    basé sur les données de [l'étude INCA 3](https://www.anses.fr/fr/system/files/NUT2014SA0234Ra.pdf), permettant de se rapprocher du régime moyen d'un Français.
+
+    💡 Vous trouverez la documentation complète dans [notre wiki](https://accelerateur-transition-ecologique-ademe.notion.site/Empreinte-des-repas-NGC-377d2143f3a14b558ab2c8e0426d2e23).
+
+    🧮 Le calcul détaillé est [disponible ici](https://docs.google.com/spreadsheets/d/1L3p1m2jtbSK7f3i9AYvWIHntXhI_IiVIY9RM6-IxTb8/edit#gid=1235090355) sous forme de tableur.
+
+alimentation . plats . végétalien:
+  titre: Végétalien
+  formule: empreinte * nombre
+  unité: kgMatiere/semaine
+  icônes: 🌾🥜🥗
+  description: |
+    Repas sans produits animaux.
+
+alimentation . plats . végétalien . empreinte:
+  titre: Empreinte d'un repas végétalien
+  formule: 4.17
+  unité: kgMatiere/repas
+
+  
+alimentation . plats . végétalien . nombre:
+  question: Nombre de plats végétaliens par semaine
+  par défaut: 0
+  plancher: 0
+  unité: repas/semaine
+
+alimentation . plats . végétarien:
+  titre: Végétarien
+  formule: empreinte * nombre
+  icônes: 🥗🍳🧀
+  unité: kgMatiere/semaine
+  description: |
+    Repas sans chair animale, avec des œufs ou un peu de fromage.
+
+alimentation . plats . végétarien . empreinte:
+  titre: Empreinte d'un repas végétarien
+  formule: 6.51
+  unité: kgMatiere/repas
+alimentation . plats . végétarien . nombre:
+  question: Nombre de plats végétariens par semaine
+  par défaut: 5
+  unité: repas/semaine
+
+alimentation . plats . viande blanche:
+  titre: Viande blanche
+  icônes: 🍗🥓
+  formule: empreinte * nombre
+  unité: kgMatiere/semaine
+  description: |
+    Repas contenant une pièce de poulet, porc.
+
+alimentation . plats . viande blanche . empreinte:
+  titre: Empreinte d'un repas de type viande blanche (poulet, porc)
+  formule: 8.99
+  unité: kgMatiere/repas
+
+alimentation . plats . viande blanche . nombre:
+  question: Nombre de plats viande blanche par semaine
+  par défaut: 4
+  plancher: 0
+  unité: repas/semaine
+
+alimentation . plats . viande rouge:
+  titre: Viande rouge
+  icônes: 🥩🍖
+  formule: empreinte * nombre
+  unité: kgMatiere/semaine
+  description: |
+    Repas contenant une pièce de bœuf, veau, ou agneau.
+
+alimentation . plats . viande rouge . empreinte:
+  titre: Empreinte d'un repas de type viande rouge (bœuf, veau, agneau)
+  formule: 17.86
+  unité: kgMatiere/repas
+
+alimentation . plats . viande rouge . nombre:
+  question: Nombre de plats viande rouge par semaine
+  par défaut: 3
+  plancher: 0
+  unité: repas/semaine
+
+alimentation . plats . poisson gras:
+  titre: Poisson gras
+  formule: empreinte * nombre
+  icônes: 🍣🥧
+  unité: kgMatiere/semaine
+  description: |
+    Repas contenant thon, saumon, sardine ou maquereau.
+
+alimentation . plats . poisson gras . empreinte:
+  titre: Empreinte d'un repas de type poisson gras (thon, saumon, sardine, maquereau)
+  formule: 4.12
+  unité: kgMatiere/repas
+
+alimentation . plats . poisson gras . nombre:
+  question: Nombre de plats poisson gras par semaine
+  par défaut: 2
+  plancher: 0
+  unité: repas/semaine
+
+alimentation . plats . poisson blanc:
+  titre: Poisson blanc
+  formule: empreinte * nombre
+  unité: kgMatiere/semaine
+  icônes: 🐟🍚
+  description: |
+    Repas avec un filet de poisson blanc.
+
+alimentation . plats . poisson blanc . empreinte:
+  titre: Empreinte d'un repas de type poisson blanc
+  formule: 4.12
+  unité: kgMatiere/repas
+
+alimentation . plats . poisson blanc . nombre:
+  question: Nombre de plats poisson blanc par semaine
+  par défaut: 0
+  plancher: 0
+  unité: repas/semaine
+
+alimentation . petit déjeuner annuel:
+  titre: Petit déjeuner
+  icônes: 🥐
+  formule: petit déjeuner . par jour * commun . jours par an
+
+alimentation . petit déjeuner . par semaine:
+  titre: Empreinte hebdo petit déjeuner
+  formule: par jour * commun . jours par semaine
+  unité: kgMatiere/semaine
+
+alimentation . petit déjeuner . par jour:
+  titre: Empreinte hebdo petit déjeuner
+  formule: alimentation . petit déjeuner * 1 repas/jour
+  unité: kgMatiere/jour
+
+alimentation . petit déjeuner:
+  formule:
+    variations:
+      - si: type = 'continental'
+        alors: continental
+      - si: type = 'lait céréales'
+        alors: lait céréales
+      - si: type = 'britannique'
+        alors: britannique
+      - si: type = 'végétalien'
+        alors: végétalien
+      - sinon: 0
+  unité: kgMatiere/repas
+
+alimentation . petit déjeuner . type:
+  question: Quel petit déjeuner vous correspond le plus ?
+  description: |
+    Il existe une variété infinie de petits déjeuners. Nous en avons sélectionné quelques-uns pour que vous obteniez une réponse facilement.
+
+    Même si vous ne retrouvez pas exactement votre petit déjeuner, choisissez celui qui s'en rapproche !
+
+    > À noter que votre consommation de jus de fruits / café / thé / chocolat chaud est comptabilisée dans la question dédiée aux boissons chaudes.
+
+  par défaut: "'continental'"
+  formule:
+    une possibilité:
+      choix obligatoire: oui
+      possibilités:
+        - continental
+        - lait céréales
+        - britannique
+        - végétalien
+        - aucun
+
+alimentation . petit déjeuner . continental:
+  titre: Continental
+  formule: 0.28
+  unité: kgMatiere/repas
+  description: |
+    Petit déjeuner avec pain, viennoiserie, beurre, confiture et un fruit.
+
+    L'empreinte du petit déjeuner continental est donné par le tableau suivant :
+
+    | Ingrédients                                                                        | CIQUAL | Qte (g) | Kcal  | Protéines (g) | Lipides (g) | kgMatiere/kg |  kgMatiere  |
+    | ---------------------------------------------------------------------------------- | ------ | ------- | ----- | ------------- | ----------- | --------- | -------- |
+    | Pain (Pain, baguette, courante)                                                    | 7001   | 50      | 142   | 4,14          | 0,7         | 0,69      |  0,03    |
+    | Vienoiserie (Croissant, sans précision)                                            | 7602   | 50      | 186   | 3,33          | 10          | 1,61      |  0,08    |
+    | Beurre demi-sel                                                                    | 16402  | 10      | 73,8  | 0,07          | 8,14        | 7,73      |  0,08    |
+    | Confiture (Confiture, tout type de fruits, allégée en sucres (extra ou classique)) | 31024  | 20      | 50,2  | 0             | 0,1         | 1,42      |  0,03    |
+    | Orange                                                                             | 13034  | 100     | 45,5  | 0,75          | 0           | 0,63      |  0,06    |
+    | Total                                                                              |        | 230     | 497,5 | 8,28          | 18,94       |           | **0,28** |
+
+    💡 Vous trouverez la documentation complète dans [notre wiki](https://accelerateur-transition-ecologique-ademe.notion.site/Empreinte-des-repas-NGC-377d2143f3a14b558ab2c8e0426d2e23).
+
+    🧮 Le calcul détaillé est [disponible ici](https://docs.google.com/spreadsheets/d/1L3p1m2jtbSK7f3i9AYvWIHntXhI_IiVIY9RM6-IxTb8/edit#gid=1235090355) sous forme de tableur.
+
+alimentation . petit déjeuner . lait céréales:
+  titre: Lait céréales
+  formule:
+    variations:
+      - si: type de lait = 'lait de vache'
+        alors: lait vache céréales
+      - si: type de lait = 'lait de soja'
+        alors: lait soja céréales
+      - si: type de lait = 'lait d'avoine'
+        alors: lait avoine céréales
+
+alimentation . petit déjeuner . lait vache céréales:
+  titre: Céréales avec lait de vache
+  formule: 0.460
+  unité: kgMatiere/repas
+  description: |
+    Petit déjeuner avec un produit laitier (lait de vache) et une portion de céréales.
+
+    L'empreinte du petit déjeuner lait de vache et céréales est donné par le tableau suivant :
+
+    | Ingrédients            | CIQUAL | Qte (g) | Kcal  | Protéines (g) | Lipides (g) | kgMatiere/kg |  kgMatiere  |
+    | ---------------------- | ------ | ------- | ----- | ------------- | ----------- | --------- | -------- |
+    | Céréales               | CRL    | 60      | 243,3 | 5,05          | 4,67        | 3,23      |  0,19    |
+    | Lait demi-écrémé (UHT) | 19041  | 200     | 94,6  | 6,76          | 3,1         | 1,31      |  0,26    |
+    | Total                  |        | 260     | 337,9 | 11,81         | 7,77        |           | **0,46** |
+
+    💡 Vous trouverez la documentation complète dans [notre wiki](https://accelerateur-transition-ecologique-ademe.notion.site/Empreinte-des-repas-NGC-377d2143f3a14b558ab2c8e0426d2e23).
+
+    🧮 Le calcul détaillé est [disponible ici](https://docs.google.com/spreadsheets/d/1L3p1m2jtbSK7f3i9AYvWIHntXhI_IiVIY9RM6-IxTb8/edit#gid=1235090355) sous forme de tableur.
+
+alimentation . petit déjeuner . lait soja céréales:
+  titre: Céréales avec lait de soja
+  formule: 0.280
+  unité: kgMatiere/repas
+  description: |
+    Petit déjeuner avec un produit laitier (lait de soja) et une portion de céréales.
+
+    L'empreinte du petit déjeuner lait de soja et céréales est donné par le tableau suivant :
+
+    | Ingrédients                                        | CIQUAL | Qte (g) | Kcal  | Protéines (g) | Lipides (g) | kgMatiere/kg |  kgMatiere  |
+    | -------------------------------------------------- | ------ | ------- | ----- | ------------- | ----------- | --------- | -------- |
+    | Céréales                                           | CRL    | 60      | 243,3 | 5,05          | 4,67        | 3,23      |  0,19    |
+    | Boisson au soja, nature, non enrichie, préemballée | 18900  | 200     | 71,6  | 6,62          | 4,14        | 0,45      |  0,09    |
+    | Total                                              |        | 260     | 314,9 | 11,67         | 8,81        |           | **0,28** |
+
+    💡 Vous trouverez la documentation complète dans [notre wiki](https://accelerateur-transition-ecologique-ademe.notion.site/Empreinte-des-repas-NGC-377d2143f3a14b558ab2c8e0426d2e23).
+
+    🧮 Le calcul détaillé est [disponible ici](https://docs.google.com/spreadsheets/d/1L3p1m2jtbSK7f3i9AYvWIHntXhI_IiVIY9RM6-IxTb8/edit#gid=1235090355) sous forme de tableur.
+
+alimentation . petit déjeuner . lait avoine céréales:
+  titre: Céréales avec lait d'avoine
+  formule: 0.300
+  unité: kgMatiere/repas
+  description: |
+    Petit déjeuner avec un produit laitier (lait d'avoine) et une portion de céréales.
+
+    L'empreinte du petit déjeuner lait d'avoine et céréales est donné par le tableau suivant :
+
+    | Ingrédients                                  | CIQUAL | Qte (g) | Kcal  | Protéines (g) | Lipides (g) | kgMatiere/kg |  kgMatiere  |
+    | -------------------------------------------- | ------ | ------- | ----- | ------------- | ----------- | --------- | -------- |
+    | Céréales                                     | CRL    | 60      | 243,3 | 5,05          | 4,67        | 3,23      |  0,19    |
+    | Boisson à base d'avoine, nature, préemballée | 18905  | 200     | 85    | 0,9           | 2,2         | 0,54      |  0,11    |
+    | Total                                        |        | 260     | 328,3 | 5,95          | 6,87        |           | **0,3**  |
+
+    💡 Vous trouverez la documentation complète dans [notre wiki](https://accelerateur-transition-ecologique-ademe.notion.site/Empreinte-des-repas-NGC-377d2143f3a14b558ab2c8e0426d2e23).
+
+    🧮 Le calcul détaillé est [disponible ici](https://docs.google.com/spreadsheets/d/1L3p1m2jtbSK7f3i9AYvWIHntXhI_IiVIY9RM6-IxTb8/edit#gid=1235090355) sous forme de tableur.
+
+alimentation . petit déjeuner . britannique:
+  titre: Britannique
+  formule: 1.18
+  unité: kgMatiere/repas
+  description: |
+    Petit déjeuner avec de la charcuterie, 2 œufs et des toasts.
+
+    L'empreinte du petit déjeuner britannique est donné par le tableau suivant :
+
+    | Ingrédients                                | CIQUAL | Qte (g) | Kcal   | Protéines (g) | Lipides (g) | kgMatiere/kg |  kgMatiere  |
+    | ------------------------------------------ | ------ | ------- | ------ | ------------- | ----------- | --------- | -------- |
+    | Jambon cuit, supérieur                     | 28900  | 100     | 125    | 20,8          | 4,28        | 6,92      |  0,69    |
+    | Oeuf, cru (2)                              | 22000  | 120     | 168    | 15,24         | 11,8        | 3,17      |  0,38    |
+    | Huile                                      | 17440  | 7       | 63,07  | 0             | 7           | 2,57      |  0,02    |
+    | Toasts (2 tranches - Pain de mie, courant) | 7200   | 50      | 137,5  | 3,57          | 1,8         | 1,75      |  0,09    |
+    | Total                                      |        | 277     | 493,57 | 39,61         | 24,88       | 14,41     | **1,18** |
+
+    💡 Vous trouverez la documentation complète dans [notre wiki](https://accelerateur-transition-ecologique-ademe.notion.site/Empreinte-des-repas-NGC-377d2143f3a14b558ab2c8e0426d2e23).
+
+    🧮 Le calcul détaillé est [disponible ici](https://docs.google.com/spreadsheets/d/1L3p1m2jtbSK7f3i9AYvWIHntXhI_IiVIY9RM6-IxTb8/edit#gid=1235090355) sous forme de tableur.
+
+alimentation . petit déjeuner . végétalien:
+  titre: Végétalien
+  formule: 0.380
+  unité: kgMatiere/repas
+  description: |
+    Petit déjeuner avec une portion de muesli, un fruit
+
+    L'empreinte du petit déjeuner végétalien est donné par le tableau suivant :
+
+    | Ingrédients            | CIQUAL | Qte (g) | Kcal   | Protéines (g) | Lipides (g) | kgMatiere/kg |  kgMatiere  |
+    | ---------------------- | ------ | ------- | ------ | ------------- | ----------- | --------- | -------- |
+    | Dessert vegan (fruits) | DV     | 250     | 148,38 | 1,77          | 0,36        | 0,73      |  0,18    |
+    | Céréales               | CRL    | 60      | 243,3  | 5,05          | 4,67        | 3,23      |  0,19    |
+    | Total                  |        | 250     | 148,38 | 1,77          | 0,36        |           | **0,38** |
+
+    💡 Vous trouverez la documentation complète dans [notre wiki](https://accelerateur-transition-ecologique-ademe.notion.site/Empreinte-des-repas-NGC-377d2143f3a14b558ab2c8e0426d2e23).
+
+    🧮 Le calcul détaillé est [disponible ici](https://docs.google.com/spreadsheets/d/1L3p1m2jtbSK7f3i9AYvWIHntXhI_IiVIY9RM6-IxTb8/edit#gid=1235090355) sous forme de tableur.
+
+alimentation . petit déjeuner . type . continental:
+  icônes: 🥐🥖
+  titre: Viennoiserie et pain
+  description: |
+    Nous avons fait le choix de considérer un petit déjeuner standard français proche du petit déjeuner appelé ["continental"](https://fr.wikipedia.org/wiki/Déjeuner#Repas_de_type_continental).
+    Il comprend pain, beurre, confiture, viennoiserie et un fruit.
+
+alimentation . petit déjeuner . type . lait céréales:
+  icônes: 🥣🎑
+  titre: Lait et céréales
+  description: |
+    Un bol de lait ou un yaourt avec des céréales. L'origine (animale ou végétale) du lait que vous buvez vous sera demandée par la suite !
+
+alimentation . petit déjeuner . type . britannique:
+  titre: Salé (type britannique)
+  icônes: 🍳🥓
+  description: |
+    Un petit dej' salé : toasts, œufs, charcuterie. Nous avons allégé le traditionnel [déjeuner anglais ou irlandais](https://fr.wikipedia.org/wiki/Petit_déjeuner_anglais) qui comprend également baked beans, saucisses, tomates, champignons, pommes de terre.
+
+alimentation . petit déjeuner . type . végétalien:
+  titre: Fruits
+  icônes: 🍌🍎
+  description: |
+    Un petit dej' composé de fruits.
+
+alimentation . petit déjeuner . type . aucun:
+  titre: Pas de petit-dej'
+  icônes: ❌
+  description: |
+    Vous ne mangez rien au petit déjeuner (mais vous pouvez boire un café, un thé ou un chocolat chaud pris en compte dans une autre question).
+
+alimentation . local:
+  icônes: 🍅🇫🇷
+
+alimentation . local . empreinte:
+  titre: Bonus régime local
+  formule:
+    variations:
+      - si: consommation = 'jamais'
+        alors: 0
+      - sinon: (-1) * niveau * part locale annuelle
+  unité: kgMatiere
+
+alimentation . local . consommation:
+  question: Consommez-vous des produits locaux ?
+  description: |
+    Cette question nous permet de corriger l'empreinte de votre régime alimentaire en fonction de votre habitude sur le caractère local de vos achats.
+
+    Nous considérons "locaux" les aliments qui sont issus de la région où vous vivez ou de régions proches.
+
+    Ce critère a un impact relativement faible, car la part du transport dans l'empreinte carbone des produits que nous consommons est faible devant les émissions liées à la production, la transformation ou l'emballage, surtout quand votre régime est carné.
+
+    Mais c'est toujours ça de gagné, et les avantages d'une consommation locale ne s'arrêtent pas à l'empreinte climat.
+
+    > ⚠️ Attention, si vous faites vos courses en voiture à plusieurs km de chez vous chaque semaine, il est possible que l'empreinte du dernier km dépasse les gains d'une alimentation locale !
+
+  note: Voir détail de l'approche de calcul [ici](http://nosgestesclimat/documentation/alimentation/local/part-locale)
+  par défaut: "'jamais'"
+  formule:
+    une possibilité:
+      choix obligatoire: oui
+      possibilités:
+        - jamais
+        - parfois
+        - souvent
+        - oui toujours
+
+alimentation . local . consommation . jamais:
+  titre: Jamais
+alimentation . local . consommation . parfois:
+  titre: Parfois
+alimentation . local . consommation . souvent:
+  titre: Souvent
+alimentation . local . consommation . oui toujours:
+  titre: Oui toujours
+
+alimentation . local . niveau:
+  formule:
+    variations:
+      - si: consommation = 'oui toujours'
+        alors: 100%
+      - si: consommation = 'souvent'
+        alors: 66.6%
+      - si: consommation = 'parfois'
+        alors: 33.3%
+      - sinon: 0%
+  description: |
+    On applique un coefficient de 0,333 et 0,666 dans le cas où l'utilisateur indique qu'il consomme respectivement "parfois" ou "souvent" local.
+
+alimentation . local . part locale annuelle:
+  formule: part locale * commun . semaines par an
+
+alimentation . local . part locale:
+  formule:
+    somme:
+      - alimentation . plats . végétalien * 12%
+      - alimentation . plats . végétarien * 8%
+      - alimentation . plats . viande blanche * 3%
+      - alimentation . plats . viande rouge * 1%
+      - alimentation . plats . poisson gras * 5%
+      - alimentation . plats . poisson blanc * 6%
+      - alimentation . petit déjeuner . par semaine * 8%
+  unité: kgMatiere/semaine
+  description: |
+    Dans une première approche, nous avons choisi de travailler sur les menus proposés dans le simulateur en considérant les facteurs d'émission d'Agribalyse, actualisés en divisant la part de transport par 2.
+
+  note: |
+    Ces coefficients sont obtenus en reconstituant les repas types de la Base Carbone avec des produits équivalents issus d'Agribalyse
+    et en considérant une part de transport divisée par 2. Plus concrètement, le ratio = plat reconstitué avec une part transport divisée par 2 / plat reconstitué.
+
+    🧮 Le calcul détaillé est [disponible ici](https://docs.google.com/spreadsheets/d/1SVYvBaaYDOUDcg5jX0eZFEColnWWIL8PCLMGrPR000o/edit#gid=1694091424) sous forme de tableur.
+
+alimentation . de saison:
+  icônes: 🍅🌞
+
+alimentation . de saison . empreinte:
+  titre: Bonus régime de saison
+  formule:
+    variations:
+      - si: consommation = 'jamais'
+        alors: 0
+      - sinon: facteur de saison * part de saison
+
+alimentation . de saison . facteur de saison:
+  formule: (-1) * niveau / ratio
+
+alimentation . de saison . consommation:
+  question: Consommez-vous des produits de saison ?
+  description: |
+    Cette question nous permet de corriger l'empreinte de votre régime alimentaire en fonction de votre habitude sur le caractère de saison de vos achats.
+
+    Cet impact est relativement faible, car la part de produits de saison représente seulement 7% de l'alimentation moyenne d'un Français.
+
+    Mais c'est toujours ça de gagné, et les avantages d'une consommation de saison ne s'arrêtent pas à l'empreinte climat.
+
+    > Mais quelle est la saison d'une pomme, d'un chou-fleur ?
+    > Découvrez notre mini-site [Mes fruits et légumes de saison](https://mesfruitsetlegumesdesaison.fr).
+  note: Voir détail de l'approche de calcul [ici](http://nosgestesclimat/documentation/alimentation/de-saison/pourcentage-saisonable)
+  par défaut: "'jamais'"
+  formule:
+    une possibilité:
+      choix obligatoire: oui
+      possibilités:
+        - jamais
+        - parfois
+        - souvent
+        - oui toujours
+
+alimentation . de saison . consommation . jamais:
+  titre: Jamais
+alimentation . de saison . consommation . parfois:
+  titre: Parfois
+alimentation . de saison . consommation . souvent:
+  titre: Souvent
+alimentation . de saison . consommation . oui toujours:
+  titre: Oui toujours
+
+alimentation . de saison . niveau:
+  formule:
+    variations:
+      - si: consommation = 'oui toujours'
+        alors: 100%
+      - si: consommation = 'souvent'
+        alors: 66.6%
+      - si: consommation = 'parfois'
+        alors: 33.3%
+      - sinon: 0%
+  description: |
+    On applique un coefficient de 0,333 et 0,666 dans le cas où l'utilisateur indique qu'il consomme respectivement "parfois" ou "souvent" de saison.
+
+alimentation . de saison . ratio:
+  formule: 2.26
+  description: |
+    Ce coefficient de 2,26 est issu d'Agribalyse en réalisant la moyenne des ratios d'un même produit considéré "de saison" et "hors saison".
+
+    Ce coefficient est sujet à une forte incertitude étant donné que la donnée de saison/hors saison ne concerne que 2 produits dans Agribalyse (la tomate et la fraise).
+  note: |
+    Cette méthode de calcul est imparfaite : idéalement, nous pourrions faire la différence saison / de saison sur chaque plat du régime personnalisé de l'utilisateur. Mais Agribalyse ne donne pas encore le coupe saison/pas de saison pour chaque aliment.
+
+    Elle a cependant le mérite de donner un premier ordre de grandeur.
+
+    🧮 Le calcul détaillé est [disponible ici](https://docs.google.com/spreadsheets/d/1SVYvBaaYDOUDcg5jX0eZFEColnWWIL8PCLMGrPR000o/edit#gid=1694091424) sous forme de tableur.
+
+alimentation . de saison . part de saison:
+  formule: pourcentage de saison * (petit déjeuner annuel + déjeuner et dîner)
+  unité: kgMatiere
+  description: |
+    Le pourcentage de produits de saison est appliqué à l'ensemble des repas d'un individu.
+
+alimentation . de saison . pourcentage de saison:
+  titre: Pourcentage de saison de l'empreinte d'un repas moyen
+  formule: 7.3%
+  description: |
+    Dans une première approche, nous avons choisi d'estimer la part de l'empreinte des produits de saison dans l'empreinte du [repas moyen français](https://www.bilans-ges.ademe.fr/documentation/UPLOAD_DOC_FR/index.htm?repas.htm)
+    calculé à partir de l'enquête INCA 3 (2017).
+
+    Ces produits correspondent aux fruits et légumes susceptibles d'être achetés "directement" de saison, mais également d'autres produits transformés, tels que
+    les jus de fruits, soupes, compotes, pouvant être achetés en connaissance de la date de production du produit.
+
+    Nous avons choisi d'exclure les pommes de terre du calcul étant donné que la récolte est possible presque toute l'année grâce aux nombreuses variétés de pommes de terre.
+  note: |
+    Cette méthode de calcul est imparfaite : idéalement, nous pourrions faire la différence saison / de saison sur chaque plat du régime personnalisé de l'utilisateur. Nous pourrons cependant dans une prochaine version du calcul différencier le pourcentage pour chaque élément du régime.
+
+    Elle a cependant le mérite de donner un premier ordre de grandeur.
+
+    🧮 Le calcul détaillé est [disponible ici](https://docs.google.com/spreadsheets/d/1SVYvBaaYDOUDcg5jX0eZFEColnWWIL8PCLMGrPR000o/edit#gid=1694091424) sous forme de tableur.

@@ -1,0 +1,54 @@
+logement . construction:
+  icônes: 🧱
+  formule:
+    variations:
+      - si: âge < durée d'amortissement
+        alors: surface * annuelle et par surface / habitants
+      - sinon: 0
+  note: |
+    Un logement va en moyenne durer au moins 50 ans. C'est une valeur conservative.
+
+    Nous considérons ici que l'empreinte de la construction d'un logement est attribuée chaque année au 50ième aux habitants des 50 premières années.
+
+    Par la suite, l'empreinte de construction du logement est mise à zéro.
+
+    Amélioration possible : nous manquons de données, mais il devrait être possible d'attribuer une empreinte annuelle d'entretien du logement (ravalement, isolation, travaux intérieurs, etc.).
+  unité: kgMatiere
+
+logement . construction . annuelle et par surface:
+  formule: par surface / durée d'amortissement
+  unité: kgMatiere/m2
+
+logement . construction . par surface:
+  formule:
+    variations:
+      - si:
+          toutes ces conditions:
+            - est défini: logement . appartement
+            - logement . appartement
+        alors: par surface . appartement
+      - sinon: par surface . maison
+  unité: kgMatiere/m2
+  note: |
+    Nous avons décidé de supprimer la question liée à l'éco-constructin du logement, car l'empreinte associée faisait débat. Dès que nous retrouverons des données fiables, nous la remettrons en ligne !
+
+# logement . éco-construit:
+#   question: Votre logement est-il fait en bois, paille, pierre ou terre (éco-construit) ?
+#   par défaut: non
+
+logement . construction . par surface . appartement:
+  titre: Empreinte appartement par m2
+  formule: 64
+  unité: kgMatiere/m2
+  note: Facteur d'émission issu de la Base Empreinte.
+
+logement . construction . par surface . maison:
+  titre: Empreinte maison par m2
+  formule: 70
+  unité: kgMatiere/m2
+  note: Facteur d'émission issu de la Base Empreinte.
+
+logement . construction . durée d'amortissement:
+  formule: 50
+  note: |
+    La durée de vie d'un bâtiment est fixée à 50 ans (voir la [documentation de la base empreinte, onglet Achats de bien/ Bâtiments](https://prod-basecarbonesolo.ademe-dri.fr/documentation/UPLOAD_DOC_FR/)).
